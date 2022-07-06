@@ -1,24 +1,36 @@
-﻿using OrcamentoApp;
-using OrcamentoApp.Model;
-using System.Net.Http.Headers;
-using System.Text.Json;
-
-namespace OrcamentoApp
+﻿namespace OrcamentoApp
 {
     class Program
     {
-        private static readonly HttpClient client = new HttpClient();
-
-        static async Task Main(string[] args)
+        private static void Main(string[] args)
         {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("https://localhost:7204/Orcamento"));
-            client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
+            while (true)
+            {
+                Console.WriteLine($"Bem-Vindo Ao Sistema Arancia!{Environment.NewLine}" +
+                    $"O que vc deseja?{ Environment.NewLine}" +
+                    $"1 - Fazer um orçamento{ Environment.NewLine}" +
+                    $"2 - Saber a comissão de um funcionário{ Environment.NewLine}"+
+                    $"3 - SAIR");
 
-            var streamTask = client.GetStreamAsync("https://localhost:7204/Orcamento");
-            var repositories = await JsonSerializer.DeserializeAsync<List<Modelos>>(await streamTask);
-            return;
+                //var resposta = int.Parse(Console.ReadLine());
+                _= int.TryParse(Console.ReadLine(), out var resposta);
+
+                OrcamentoService service = new();
+
+                if (resposta == 1)
+                {
+                    service.CriaOrcamento();
+                }
+                else if (resposta == 2)
+                {
+                    service.ConsultaComissão();
+                }
+                if(resposta == 3)
+                {
+                    break;
+                }               
+            }
+            Console.WriteLine("Obrigado, por usar nossos serviços!");
         }
     }
 }
